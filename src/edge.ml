@@ -19,10 +19,10 @@ let gradient slice : float =
 
 let transform image ~gradient_threshold =
   Image.mapi image ~f:(fun ~x ~y _ ->
-    if x < 1
-       || x > Image.width image - 1
-       || y < 1
-       || y > Image.height image - 1
+    if x > 1
+       && x < Image.width image - 1
+       && y > 1
+       && y < Image.height image - 1
     then (
       let slice =
         Image.slice
@@ -34,9 +34,9 @@ let transform image ~gradient_threshold =
       in
       let gradient_val = gradient slice in
       if Float.O.(gradient_val > gradient_threshold)
-      then Pixel.of_int 0
-      else Pixel.of_int (Image.max_val image))
-    else Pixel.of_int 0)
+      then Pixel.of_int (Image.max_val image)
+      else Pixel.of_int 0)
+    else Pixel.of_int (Image.max_val image))
 ;;
 
 let command =
